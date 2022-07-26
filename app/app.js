@@ -5,7 +5,7 @@ const express = require('express')
 const app = express()
 
 //라우팅
-const home = require('./routes/home') //폴더를 상대적으로 명시해줘야해요. 현재 폴더에서 routes
+const home = require('./src/routes/home') //폴더를 상대적으로 명시해줘야해요. 현재 폴더에서 routes
 
 //앱 셋팅
 app.set('views', './views') //이 화면 views를 관리해줄 파일이 저장될 폴더이름을 두번째 파라미터로 넘겨주면된다
