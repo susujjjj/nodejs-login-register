@@ -1,6 +1,6 @@
 'use strict'
 
-const app = require('../src/app')
+const app = require('../app')
 const PORT = 3000
 
 //서버 띄워주는 코드
