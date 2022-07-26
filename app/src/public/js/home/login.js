@@ -1,4 +1,5 @@
 'use strict'
+//프론트엔드 화면
 
 const id = document.querySelector('#id'),
   password = document.querySelector('#password'),
@@ -12,6 +13,8 @@ function login() {
     password: password.value,
   }
 
+  console.log(req, 'req?')
+
   fetch('/login', {
     method: 'POST',
     headers: {
@@ -19,4 +22,15 @@ function login() {
     },
     body: JSON.stringify(req),
   })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.success) {
+        location.href = '/'
+      } else {
+        alert(res.msg)
+      }
+    })
+    .catch((err) => {
+      console.error('로그인 중 에러 발생')
+    })
 }
