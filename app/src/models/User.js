@@ -18,20 +18,30 @@ class User {
   //로그인 메서드 만들기
 
   login() {
-    const body = this.body
+    const client = this.body
     //const { id, password } = UserStorage.getUsers('id', 'password') //먼저 작성한getUsers대신에 getUserInfo로하고 아이디값을 던질거다
-    const { id, password } = UserStorage.getUserInfo(body.id) //이렇게 id값을던지면
+    const { id, password } = UserStorage.getUserInfo(client.id) //이렇게 id값을던지면
 
     //스토리지에서 가져온 id랑, 클라이언트가 입력한 body의 id가 같고,
     //스토리지의 password와 클라이언트가 입력한 패스워드가 같은지
     if (id) {
-      if (id === body.id && password === body.password) {
+      if (id === client.id && password === client.password) {
         return { success: true }
       }
       //id는 있는데 비번이 다르면
       return { success: false, msg: '비밀번호가 틀렸습니다.' }
     }
     return { success: false, msg: '존재하지 않는 아이디입니다.' }
+  }
+
+  //이 유저는 단순하게 이 UserStorage에 save라는 메소드를 호출해서
+  //데이터가 저장되도록해주고, 저장된 데이터를 UserStorage로 던져줘야 하니까
+  // 위 클래스가 constructor에서 전달받은 body를 아래에도 this.body와 같이 그대로 던져준다
+  register() {
+    const client = this.body
+    const response = UserStorage.save(client)
+    //그럼이제 위 UserStorage에 저장하는 해당 메서드를 /models/UserStorage안에 구현하도록 하겠음.
+    return response
   }
 }
 

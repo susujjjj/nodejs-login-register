@@ -1,6 +1,9 @@
 'use strict'
 
 class UserStorage {
+  //근데 알아야 될게, 데이터를 단순하게 검증하는 용도로  아래 static users 오브젝트처럼
+  //개발할수있지만, 데이터를 저장하기 위해서는 아래처럼 구현하면 !!안된다!!
+
   static #users = {
     // static 설정해줘야 이 클래스 자체에서 이 변수에 접근할수 있게 된다
     // users 앞에 #을 붙임으로써 정보를 은닉화할수있다(public에서 private으로 바꿔줌)
@@ -33,6 +36,14 @@ class UserStorage {
       return newUser
     }, {})
     return userInfo
+  }
+
+  static save(userInfo) {
+    const users = this.#users
+    users.id.push(userInfo.id)
+    users.name.push(userInfo.name)
+    users.password.push(userInfo.password)
+    return { success: true }
   }
 }
 
