@@ -30,19 +30,25 @@ class User {
         return { success: true }
       }
       //id는 있는데 비번이 다르면
-      return { success: false, msg: '비밀번호가 틀렸습니다.' }
+      return { success: false, msg: 'wrong password.' }
     }
-    return { success: false, msg: '존재하지 않는 아이디입니다.' }
+    return { success: false, msg: 'id does not exist.' }
   }
 
   //이 유저는 단순하게 이 UserStorage에 save라는 메소드를 호출해서
   //데이터가 저장되도록해주고, 저장된 데이터를 UserStorage로 던져줘야 하니까
   // 위 클래스가 constructor에서 전달받은 body를 아래에도 this.body와 같이 그대로 던져준다
-  register() {
+  async register() {
     const client = this.body
-    const response = UserStorage.save(client)
-    //그럼이제 위 UserStorage에 저장하는 해당 메서드를 /models/UserStorage안에 구현하도록 하겠음.
-    return response
+    try {
+      const response = await UserStorage.save(client) // 여기 await 처리가 안되있는데 이 해당데이터를
+      //storage에 저장하는데 시간이 오래 걸리니까 모두 저장할때까지 기다리라고 await을 얘도 걸어줘야함
+      //그럼이제 위 UserStorage에 저장하는 해당 메서드를 /models/UserStorage안에 구현하도록}
+      //console.log(response)
+      return response
+    } catch (err) {
+      return { success: false, msg: err }
+    }
   }
 }
 
