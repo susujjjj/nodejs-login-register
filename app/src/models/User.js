@@ -17,13 +17,14 @@ class User {
 
   //로그인 메서드 만들기
 
-  login() {
+  async login() {
     const client = this.body
     //const { id, password } = UserStorage.getUsers('id', 'password') //먼저 작성한getUsers대신에 getUserInfo로하고 아이디값을 던질거다
-    const { id, password } = UserStorage.getUserInfo(client.id) //이렇게 id값을던지면
+    const { id, password } = await UserStorage.getUserInfo(client.id) //이렇게 id값을던지면
 
     //스토리지에서 가져온 id랑, 클라이언트가 입력한 body의 id가 같고,
     //스토리지의 password와 클라이언트가 입력한 패스워드가 같은지
+
     if (id) {
       if (id === client.id && password === client.password) {
         return { success: true }

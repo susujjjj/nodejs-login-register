@@ -24,9 +24,9 @@ const output = {
 
 const process = {
   //이제 이 컨트롤러는 UserStorage에 저장하지 않습니다 그래서 지워줌
-  login: (req, res) => {
+  login: async (req, res) => {
     const user = new User(req.body)
-    const response = user.login()
+    const response = await user.login()
     return res.json(response)
     // console.log(response, 'resss')
     //return res.json(response) //이 response를 클라이언트한테 json의 형태로 응답해줄거다
@@ -49,7 +49,7 @@ const process = {
     //console.log(req.body) // back단에서 이 body를 보려면 어떤 모듈을 설치해줘야하는데 body를 잘 파싱 하기위해서
   },
   register: (req, res) => {
-    const user = new User(res.body)
+    const user = new User(req.body)
     const response = user.register()
     return res.json(response) //register의 반환값을 받아서 json 메서드를 통해서 클라이언트로 응답해주게 됨
   },
