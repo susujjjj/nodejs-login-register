@@ -1,7 +1,8 @@
 'use strict'
 
 //이 유저스 제이슨. 유저스테이블에 접근해서 파일을 읽을수있도록 해주려면 파일시스템 불러오기
-const fs = require('fs').promises
+// const fs = require('fs').promises
+const db = require('../config/db')
 
 class UserStorage {
   //은닉화
@@ -39,55 +40,37 @@ class UserStorage {
     return newUsers
   }
   //이 users에 은닉화된 private변수를 반환해준다
-  static getUsers(isAll, ...fields) {
-    return fs
-      .readFile('./src/databases/users.json')
-      .then((data) => {
-        console.log(data, 'data?')
-        return this.#getUsers(data, isAll, fields)
-      })
-      .catch(console.error)
-  }
+  // static getUsers(isAll, ...fields) {}
 
   static getUserInfo(id) {
-    console.log(id, 'id?')
-    //여기 파라미터로 id를 받을껀데, 이렇게 하는이유는
-    //아이디에 해당하는 데이터 ex: SB password, name 이 데이터를 전달하는 메서드를 만들거임
-    return fs
-      .readFile('./src/databases/users.json')
-      .then((data) => {
-        console.log(data, 'data?')
-        return this.#getUserInfo(data, id)
+    return new Promise((resolve, reject) => {
+      const query = 'SELECT * FROM users WHERE id = ?;'
+      db.query(query, [id], (err, data) => {
+        if (err) reject(`${err}`)
+        resolve(data[0])
       })
-      .catch(console.error)
+    })
   }
 
   static async save(userInfo) {
-    //users.json파일의 데이터를 읽어온다음에. 그 데이터의
-    //우리가 추가하고 싶은 데이터를 추가한 뒤에, 두번째파라미터에 data를 넣어줘야한다
-    //유저스라는 데이터를 모두다 불러오는 메서드를 만들었었다. (static getUser()//)
-    //그 메서드를 이용해주겠다.
-    const users = await this.getUsers(true) //모든 파라미터를 다 받아와주겠다라는의미
-
-    //users에 데이터 추가하기!
-    if (users.id.includes(userInfo.id)) {
-      //클라이언트가 입력안 유저정보아이디가  데이터베이스 안의 아이디에 포함되어있지 않으면
-      //데이터베이스에 이미 존재하는 아이디일경우
-      throw '이미 존재하는 아이디입니다.'
-    }
-    users.id.push(userInfo.id) //파일에 데이터 저장해주기
-    users.name.push(userInfo.name)
-    users.password.push(userInfo.password)
-    //위처럼 이렇게하면 데이터를 오브젝트 형태로 반환해서 users가 갖고있을거임 거기에
-    //데이터를 추가한 다음에 추가된 users데이터를 두번째 파람에넘긴다
-    fs.writeFile('./src/databases/users.json', JSON.stringify(users)) ////저장된 데이터를  JSON.stringify를 통해서 저장하고, 저장이 완료되면, 이 메소드는 아무것도 반환하지 않음.
-    //오류가 낫을때만 에러 던져버림 .따라서 아래에 반환해주기
-    return { success: true } //성공하면 true반환
-
-    // users.id.push(userInfo.id)
-    // users.name.push(userInfo.name)
-    // users.password.push(userInfo.password)
-    // return { success: true }
+    return new Promise((resolve, reject) => {
+      const query = 'INSERT INTO(id, name, password) VALUES(?, ?, ?);'
+      //물음표는 위 getUserInfo 쿼리에 물읆표랑 같은거에요
+      db.query(
+        query, //첫번째 파라미터는 쿼리떤지고
+        [userInfo.id, userInfo.name, userInfo.password],
+        //두번째 파라미터는 위 물음표에 대입될 변수들을 넣어주고
+        (
+          err,
+          //data
+        ) => {
+          //이건단순이 INSERT로 저장하는거기때문에  따로 데이터를 받을게 없음. 그래서 데이터인자를 그냥 없애버림
+          //err data분기하기
+          if (err) reject(`${err}`)
+          resolve({ success: true })
+        },
+      ) //이건단순이 INSERT로 저장하는거기때문에  따로 데이터를 받을게 없음. 그래서 데이터인자를 그냥 없애버림
+    })
   }
 }
 

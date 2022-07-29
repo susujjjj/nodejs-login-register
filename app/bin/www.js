@@ -1,7 +1,7 @@
 'use strict'
 
 const app = require('../app')
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 
 //서버 띄워주는 코드
 //현재 이파일안에서 이 앱이라는것을 찾을수가 없음 그러므로 app 불러와줘야함

@@ -19,20 +19,25 @@ class User {
 
   async login() {
     const client = this.body
-    //const { id, password } = UserStorage.getUsers('id', 'password') //먼저 작성한getUsers대신에 getUserInfo로하고 아이디값을 던질거다
-    const { id, password } = await UserStorage.getUserInfo(client.id) //이렇게 id값을던지면
 
-    //스토리지에서 가져온 id랑, 클라이언트가 입력한 body의 id가 같고,
-    //스토리지의 password와 클라이언트가 입력한 패스워드가 같은지
+    try {
+      //먼저 작성한getUsers대신에 getUserInfo로하고 아이디값을 던질거다
+      const { id, password } = await UserStorage.getUserInfo(client.id) //이렇게 id값을던지면
 
-    if (id) {
-      if (id === client.id && password === client.password) {
-        return { success: true }
+      //스토리지에서 가져온 id랑, 클라이언트가 입력한 body의 id가 같고,
+      //스토리지의 password와 클라이언트가 입력한 패스워드가 같은지
+
+      if (id) {
+        if (id === client.id && password === client.password) {
+          return { success: true }
+        }
+        //id는 있는데 비번이 다르면
+        return { success: false, msg: 'wrong password.' }
       }
-      //id는 있는데 비번이 다르면
-      return { success: false, msg: 'wrong password.' }
+      return { success: false, msg: 'id does not exist.' }
+    } catch (err) {
+      return { success: false, msg: err }
     }
-    return { success: false, msg: 'id does not exist.' }
   }
 
   //이 유저는 단순하게 이 UserStorage에 save라는 메소드를 호출해서
