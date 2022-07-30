@@ -4,7 +4,7 @@
 const express = require('express')
 let bodyParser = require('body-parser')
 const dotenv = require('dotenv')
-const morgan = require('morgan')
+
 const fs = require('fs')
 
 const app = express()
@@ -28,8 +28,6 @@ app.use(bodyParser.json())
 
 //URL을 통해 전달되는 데이터에 한글, 공백 등과 같은 문자가 포함될 경우 제대로 인식되지 않는 문제 해결
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(morgan('dev', { stream: accessLogStream }))
-app.use(morgan('combined'))
 
 //이 url을 통해서
 app.use('/', home) //루트로 들어오면 홈으로 이동하게 되는것 ! 그래서 결과적으로는 routes/home/index.js파일로 들어와서

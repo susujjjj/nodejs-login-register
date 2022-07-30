@@ -8,6 +8,9 @@ const id = document.querySelector('#id'),
 loginBtn.addEventListener('click', login) //이 두번째 파라미터로 넘어오는것은 함수
 
 function login() {
+  if (!id.value) return alert('please input id')
+  if (!password.value) return alert('please input password')
+
   const req = {
     id: id.value,
     password: password.value,
@@ -25,6 +28,7 @@ function login() {
       if (res.success) {
         location.href = '/'
       } else {
+        if (res.err) return alert(res.err)
         alert(res.msg)
       }
     })

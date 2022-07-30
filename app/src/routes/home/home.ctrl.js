@@ -1,16 +1,21 @@
 'use strict'
 
+const logger = require('../../config/logger')
 const User = require('../../models/User')
 // const UserStorage = require('../../models/UserStorage')
 
+//get method들에 해당함
 const output = {
   home: (req, res) => {
+    logger.info(`GET / 200 "relocate to main page"`)
     res.render('home/index')
   },
   login: (req, res) => {
+    logger.info(`GET / login 200 "relocate to login page"`)
     res.render('home/login')
   },
   register: (req, res) => {
+    logger.info(`GET / register 200 "relocate to register page"`)
     res.render('home/register')
   },
 }
@@ -27,6 +32,14 @@ const process = {
   login: async (req, res) => {
     const user = new User(req.body)
     const response = await user.login()
+    if (response.err)
+      logger.error(
+        `POST / login 200 Response: "success: ${response.success}, ${response.err}"`,
+      )
+    else
+      logger.info(
+        `POST / login 200 Response: "success: ${response.success}, msg: ${response.msg}"`,
+      )
     return res.json(response)
     // console.log(response, 'resss')
     //return res.json(response) //이 response를 클라이언트한테 json의 형태로 응답해줄거다
@@ -51,6 +64,15 @@ const process = {
   register: async (req, res) => {
     const user = new User(req.body)
     const response = await user.register() //레지스터 메서드실행되도록되있음
+
+    if (response.err)
+      logger.error(
+        `POST / login 200 Response: "success: ${response.success}, ${response.err}"`,
+      )
+    else
+      logger.info(
+        `POST / register 200 Response: "success: ${response.success}, msg: ${response.msg}"`,
+      )
     return res.json(response) //register의 반환값을 받아서 json 메서드를 통해서 클라이언트로 응답해주게 됨
   },
 }

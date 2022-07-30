@@ -36,7 +36,7 @@ class User {
       }
       return { success: false, msg: 'id does not exist.' }
     } catch (err) {
-      return { success: false, msg: err }
+      return { success: false, err }
     }
   }
 
@@ -52,7 +52,7 @@ class User {
       //console.log(response)
       return response
     } catch (err) {
-      return { success: false, msg: err }
+      return { success: false, err }
     }
   }
 }

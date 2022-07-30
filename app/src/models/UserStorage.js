@@ -47,14 +47,14 @@ class UserStorage {
       const query = 'SELECT * FROM users WHERE id = ?;'
       db.query(query, [id], (err, data) => {
         if (err) reject(`${err}`)
-        resolve(data[0])
+        else resolve(data[0])
       })
     })
   }
 
   static async save(userInfo) {
     return new Promise((resolve, reject) => {
-      const query = 'INSERT INTO(id, name, password) VALUES(?, ?, ?);'
+      const query = 'INSERT INTO (id, name, password) VALUES(?, ?, ?);'
       //물음표는 위 getUserInfo 쿼리에 물읆표랑 같은거에요
       db.query(
         query, //첫번째 파라미터는 쿼리떤지고
@@ -67,7 +67,7 @@ class UserStorage {
           //이건단순이 INSERT로 저장하는거기때문에  따로 데이터를 받을게 없음. 그래서 데이터인자를 그냥 없애버림
           //err data분기하기
           if (err) reject(`${err}`)
-          resolve({ success: true })
+          else resolve({ success: true })
         },
       ) //이건단순이 INSERT로 저장하는거기때문에  따로 데이터를 받을게 없음. 그래서 데이터인자를 그냥 없애버림
     })
