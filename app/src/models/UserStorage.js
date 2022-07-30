@@ -54,7 +54,7 @@ class UserStorage {
 
   static async save(userInfo) {
     return new Promise((resolve, reject) => {
-      const query = 'INSERT INTO (id, name, password) VALUES(?, ?, ?);'
+      const query = 'INSERT INTO users(id, name, password) VALUES(?, ?, ?);'
       //물음표는 위 getUserInfo 쿼리에 물읆표랑 같은거에요
       db.query(
         query, //첫번째 파라미터는 쿼리떤지고
